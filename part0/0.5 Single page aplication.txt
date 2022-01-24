@@ -1,0 +1,10 @@
+browser -> server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+server -> browser: GET spa.html
+browser -> server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server -> browser: GET main.css
+browser -> server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server -> browser: GET main.js
+browser -> server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server -> browser: GET data.json
+
+browser js draw data.json dinamically
