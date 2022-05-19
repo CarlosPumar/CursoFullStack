@@ -11,6 +11,8 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const user = await User.findById(request.body.user);
 
+  console.log(request.body);
+
   const blog = new Blog(request.body);
   let result = await blog.save();
 

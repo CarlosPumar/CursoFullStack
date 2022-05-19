@@ -52,7 +52,9 @@ const BlogForm = ({ createBlog }) => {
           onChange={({ target }) => setLikes(target.value)}
         />
         <br />
-        <button type="submit">Create</button>
+        <button id="blogFormCreate" type="submit">
+          Create
+        </button>
       </form>
     </>
   );

@@ -24,6 +24,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/login', loginRouter);
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/test');
+  app.use('/api/test', testingRouter);
+}
 
 app.use(middleware.tokenExtractor);
 app.use('/api/blogs', blogsRouter);
