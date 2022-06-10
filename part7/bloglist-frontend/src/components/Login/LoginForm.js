@@ -19,6 +19,7 @@ const LoginForm = () => {
   return (
     <>
       <Form
+        style={{ marginTop: '2em' }}
         name="basic"
         labelCol={{
           span: 8,
@@ -38,7 +39,7 @@ const LoginForm = () => {
             span: 16,
           }}
         >
-          <h2>Login</h2>
+          <h1>Login</h1>
         </Form.Item>
         <Form.Item
           wrapperCol={{

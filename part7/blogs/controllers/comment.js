@@ -18,8 +18,6 @@ commentRouter.post('/', async (request, response) => {
   blog.comments = blog.comments.concat(result._id);
   await blog.save();
 
-  console.log(result);
-
   response.status(201).json(result);
 });
 
