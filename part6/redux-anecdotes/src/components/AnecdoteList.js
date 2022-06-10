@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { voteAnecdote, setNotification } from '../reducers/anecdoteReducer';
+import { voteAnecdote, setNotification } from '../actions/anecdotesActions';
 import { sortByVotes } from '../utils/sort';
 
 const AnecdoteList = () => {

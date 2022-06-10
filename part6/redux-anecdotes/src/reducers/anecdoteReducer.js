@@ -21,8 +21,6 @@ const anecdoteSlice = createSlice({
         clearTimeout(anecdoteTimer.timer);
       }
 
-      console.log(action.payload);
-
       const id = action.payload.id;
       const anecdote = state.find((anecdote) => anecdote.id === id);
       const changedAnecdote = {
