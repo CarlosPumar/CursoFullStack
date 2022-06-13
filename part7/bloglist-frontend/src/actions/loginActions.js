@@ -1,6 +1,7 @@
 import loginService from '../services/login';
 import { setUser } from '../reducers/userReducer';
 import { showNotification } from './notificationActions';
+import { LOGIN_ERROR } from '../types/notificationTypes';
 
 export const login = (credentials) => {
   return async (dispatch) => {
@@ -9,7 +10,7 @@ export const login = (credentials) => {
       window.localStorage.setItem('user', JSON.stringify(user));
       dispatch(setUser(user));
     } catch (exception) {
-      dispatch(showNotification('Wrong credentials', 3000));
+      dispatch(showNotification('Wrong credentials', LOGIN_ERROR, 3000));
     }
   };
 };

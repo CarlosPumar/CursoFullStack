@@ -1,18 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { types } from '../types/notificationTypes';
+
+const initialState = types.map((type) => {
+  return {
+    type,
+    message: null,
+    timer: null,
+  };
+});
 
 const notificationSlice = createSlice({
   name: 'notification',
-  initialState: {
-    message: '',
-    timer: null,
-  },
+  initialState,
   reducers: {
     setNotification(state, action) {
-      state.message = action.payload.message;
-      if (state.timer) {
-        clearTimeout(state.timer);
-      }
-      state.timer = action.payload.timer;
+      return state.map((notification) => {
+        if (notification.type === action.payload.type) {
+          if (notification.timer) {
+            clearTimeout(notification.timer);
+          }
+
+          return {
+            ...notification,
+            message: action.payload.message,
+            timer: action.payload.timer,
+          };
+        }
+        return notification;
+      });
     },
   },
 });

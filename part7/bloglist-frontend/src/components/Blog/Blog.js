@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import { getComments } from '../../actions/commentsAction';
 import { Table, Button } from 'antd';
 import CommentList from '../Comment/CommentList';
+import { showNotification } from '../../actions/notificationActions';
+import { DELETE_BLOG_ERROR } from '../../types/notificationTypes';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -29,8 +31,18 @@ const Blog = ({ blog }) => {
   };
 
   const handleRemove = async () => {
-    await dispatch(deleteBlog(blog));
-    navigate('/blogs');
+    try {
+      await dispatch(deleteBlog(blog));
+      navigate('/blogs');
+    } catch {
+      dispatch(
+        showNotification(
+          'A blog only can be delete by his owner',
+          DELETE_BLOG_ERROR,
+          3000
+        )
+      );
+    }
   };
 
   if (!blog) return <></>;

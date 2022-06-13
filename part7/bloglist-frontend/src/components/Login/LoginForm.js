@@ -4,6 +4,7 @@ import { login } from '../../actions/loginActions';
 import Notification from '../Utils/Notification';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, Space } from 'antd';
+import { LOGIN_ERROR } from '../../types/notificationTypes';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -47,7 +48,7 @@ const LoginForm = () => {
             span: 16,
           }}
         >
-          <Notification />
+          <Notification type={LOGIN_ERROR} />
         </Form.Item>
         <Form.Item
           label="Username"
