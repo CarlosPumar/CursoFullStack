@@ -10,7 +10,7 @@ export const login = (credentials) => {
       window.localStorage.setItem('user', JSON.stringify(user));
       dispatch(setUser(user));
     } catch (exception) {
-      dispatch(showNotification('Wrong credentials', LOGIN_ERROR, 3000));
+      dispatch(showNotification('Wrong credentials', LOGIN_ERROR));
     }
   };
 };

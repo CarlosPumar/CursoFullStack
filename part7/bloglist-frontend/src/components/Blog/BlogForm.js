@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { createBlog } from '../../actions/blogsActions';
 import { Button, Form, Space, Input } from 'antd';
+import Notification from '../Utils/Notification';
+import { CREATE_BLOG_ERROR } from '../../types/notificationTypes';
+import { showNotification } from '../../actions/notificationActions';
 
 const BlogForm = ({ blogFormRef }) => {
   const [title, setTitle] = useState('');
@@ -11,13 +14,17 @@ const BlogForm = ({ blogFormRef }) => {
   const [url, setUrl] = useState('');
   const dispatch = useDispatch();
 
-  const handleBlogCreation = () => {
-    dispatch(createBlog({ title, author, url, likes }));
-    setTitle('');
-    setAuthor('');
-    setUrl('');
-    setLikes('');
-    blogFormRef.current.toggleVisibility();
+  const handleBlogCreation = async () => {
+    try {
+      await dispatch(createBlog({ title, author, url, likes }));
+      setTitle('');
+      setAuthor('');
+      setUrl('');
+      setLikes('');
+      blogFormRef.current.toggleVisibility();
+    } catch {
+      dispatch(showNotification('Bad parameters', CREATE_BLOG_ERROR));
+    }
   };
 
   const layout = {
@@ -31,6 +38,7 @@ const BlogForm = ({ blogFormRef }) => {
 
   return (
     <>
+      <Notification type={CREATE_BLOG_ERROR} />
       <h2>Create blog</h2>
       <Form
         {...layout}

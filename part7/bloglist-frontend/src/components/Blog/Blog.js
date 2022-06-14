@@ -38,8 +38,7 @@ const Blog = ({ blog }) => {
       dispatch(
         showNotification(
           'A blog only can be delete by his owner',
-          DELETE_BLOG_ERROR,
-          3000
+          DELETE_BLOG_ERROR
         )
       );
     }
