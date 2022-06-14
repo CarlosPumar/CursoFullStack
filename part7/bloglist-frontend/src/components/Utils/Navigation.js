@@ -7,6 +7,7 @@ const { Header } = Layout;
 
 const Navigation = () => {
   const user = useSelector((state) => state.user);
+  if (!user) return <></>;
 
   return (
     <>
