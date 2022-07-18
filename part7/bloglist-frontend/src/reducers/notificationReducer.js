@@ -19,7 +19,6 @@ const notificationSlice = createSlice({
           if (notification.timer) {
             clearTimeout(notification.timer);
           }
-
           return {
             ...notification,
             message: action.payload.message,
