@@ -1,6 +1,13 @@
 import { useState } from 'react';
-import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries';
-import { useMutation } from '@apollo/client/react';
+import {
+  ALL_BOOKS,
+  ALL_AUTHORS,
+  FILTER_BOOKS_BY_GENRE,
+} from '../graphql/queries';
+import { ADD_BOOK } from '../graphql/mutations';
+import { useMutation, useSubscription } from '@apollo/client/react';
+import { BOOK_ADDED } from '../graphql/subscriptions';
+import { useApolloClient } from '@apollo/client/react';
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('');
@@ -8,10 +15,35 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('');
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
+  const client = useApolloClient();
 
-  const [createBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const bookAdded = subscriptionData.data.bookAdded;
+      client.cache.updateQuery({ query: ALL_BOOKS }, (data) => {
+        return {
+          allBooks: data.allBooks.concat(bookAdded),
+        };
+      });
+
+      bookAdded.genres.map((genre) => {
+        client.cache.updateQuery(
+          {
+            query: FILTER_BOOKS_BY_GENRE,
+            variables: { genre },
+          },
+          (data) => {
+            return {
+              filterBooksByGenre: data.filterBooksByGenre.concat(bookAdded),
+            };
+          },
+        );
+        return true;
+      });
+    },
   });
+
+  const [createBook] = useMutation(ADD_BOOK);
 
   if (!props.show) {
     return null;
@@ -19,8 +51,6 @@ const NewBook = (props) => {
 
   const submit = async (event) => {
     event.preventDefault();
-
-    console.log('add book...');
 
     setTitle('');
     setPublished('');

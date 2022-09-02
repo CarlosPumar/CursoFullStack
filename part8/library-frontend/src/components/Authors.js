@@ -1,19 +1,23 @@
 import { useQuery } from '@apollo/client';
-import { ALL_AUTHORS } from '../queries';
+import { ALL_AUTHORS } from '../graphql/queries';
 import AuthorSetBirthyear from './AuthorSetBirthyear';
+import { AuthContext } from '../App';
+import { useContext } from 'react';
 
 const Authors = (props) => {
   const authorsQuery = useQuery(ALL_AUTHORS);
+  const { token } = useContext(AuthContext);
 
   if (!props.show) {
     return null;
   }
 
-  if (authorsQuery.loading) {
-    return 'loading...';
-  }
+  let authors;
 
-  const authors = authorsQuery.data.allAuthors;
+  if (!authorsQuery.loading) {
+    authors = authorsQuery.data.allAuthors;
+    console.log(authors);
+  }
 
   return (
     <div>
@@ -25,16 +29,20 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map((a) => (
-            <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
-            </tr>
-          ))}
+          {!authorsQuery.loading &&
+            authors.map((author) => (
+              <tr key={author.name}>
+                <td>{author.name}</td>
+                <td>{author.born}</td>
+                <td>{author.bookCount}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
-      <AuthorSetBirthyear authors={authors} />
+
+      {!authorsQuery.loading && token && (
+        <AuthorSetBirthyear authors={authors} />
+      )}
     </div>
   );
 };

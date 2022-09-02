@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import { UPDATE_AUTHOR } from '../queries';
+import { ALL_AUTHORS } from '../graphql/queries';
+import { UPDATE_AUTHOR } from '../graphql/mutations';
 import { useMutation } from '@apollo/client/react';
 
 const AuthorSetBirthyear = ({ authors }) => {
-  const [author, setAuthor] = useState(authors[0].name);
-  const [bornYear, setBortnYear] = useState('');
-  const [updateAuthor] = useMutation(UPDATE_AUTHOR);
+  const [author, setAuthor] = useState(authors ? authors[0].name : '');
+  const [bornYear, setBornYear] = useState('');
+  const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }],
+  });
 
   const variables = {
     name: author,
     born: parseInt(bornYear),
   };
 
-  console.log(variables);
-
-  const submit = () => {
+  const submit = (event) => {
+    event.preventDefault();
     updateAuthor({
       variables,
     });
@@ -28,18 +30,19 @@ const AuthorSetBirthyear = ({ authors }) => {
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         >
-          {authors.map((author) => {
-            return (
-              <option key={author.name} value={author.name}>
-                {author.name}
-              </option>
-            );
-          })}
+          {authors &&
+            authors.map((author) => {
+              return (
+                <option key={author.name} value={author.name}>
+                  {author.name}
+                </option>
+              );
+            })}
         </select>
         <br />
         <input
           value={bornYear}
-          onChange={({ target }) => setBortnYear(target.value)}
+          onChange={({ target }) => setBornYear(target.value)}
         />
         <br />
         <button type="submit">set born year</button>

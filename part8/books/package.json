@@ -11,9 +11,18 @@
   "author": "Carlos Pumar",
   "license": "MIT",
   "dependencies": {
+    "@graphql-tools/schema": "^9.0.2",
     "apollo-server": "^3.10.0",
+    "apollo-server-core": "^3.10.2",
+    "apollo-server-express": "^3.10.2",
+    "express": "^4.18.1",
     "graphql": "^16.5.0",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "mongoose": "^6.4.6",
+    "subscriptions-transport-ws": "^0.11.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
