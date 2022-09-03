@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-  ALL_BOOKS,
-  ALL_AUTHORS,
-  FILTER_BOOKS_BY_GENRE,
-} from '../graphql/queries';
+import { ALL_AUTHORS, FILTER_BOOKS_BY_GENRE } from '../graphql/queries';
 import { ADD_BOOK } from '../graphql/mutations';
 import { useMutation, useSubscription } from '@apollo/client/react';
 import { BOOK_ADDED } from '../graphql/subscriptions';
@@ -19,12 +15,9 @@ const NewBook = (props) => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      const bookAdded = subscriptionData.data.bookAdded;
-      client.cache.updateQuery({ query: ALL_BOOKS }, (data) => {
-        return {
-          allBooks: data.allBooks.concat(bookAdded),
-        };
-      });
+      let bookAdded = subscriptionData.data.bookAdded;
+
+      bookAdded.genres.push('');
 
       bookAdded.genres.map((genre) => {
         client.cache.updateQuery(
@@ -32,14 +25,26 @@ const NewBook = (props) => {
             query: FILTER_BOOKS_BY_GENRE,
             variables: { genre },
           },
-          (data) => {
+          ({ filterBooksByGenre }) => {
             return {
-              filterBooksByGenre: data.filterBooksByGenre.concat(bookAdded),
+              filterBooksByGenre: filterBooksByGenre.concat(bookAdded),
             };
           },
         );
         return true;
       });
+
+      client.cache.updateQuery(
+        {
+          query: ALL_AUTHORS,
+        },
+        ({ allAuthors }) => {
+          console.log(allAuthors);
+          return {
+            allAuthors: allAuthors.concat(bookAdded.author),
+          };
+        },
+      );
     },
   });
 
